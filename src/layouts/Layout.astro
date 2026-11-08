@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import geist from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url';
 import geistMono from '@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2?url';
+import Analytics from '@vercel/analytics/astro';
 import { site, links, experience, education } from '../data/site';
 
 interface Props {
@@ -69,6 +70,7 @@ const fontFaces = `
     <main>
       <slot />
     </main>
+    <Analytics />
   </body>
 </html>
 
