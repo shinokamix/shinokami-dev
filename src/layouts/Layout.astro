@@ -1,0 +1,86 @@
+---
+import '../styles/global.css';
+import geist from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url';
+import geistMono from '@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2?url';
+import { site, links, experience, education } from '../data/site';
+
+interface Props {
+  title?: string;
+  noindex?: boolean;
+}
+const { title = `${site.name}, ${site.role.toLowerCase()}`, noindex = false } = Astro.props;
+
+const url = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og.png', Astro.site);
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  jobTitle: site.role,
+  url: Astro.site?.href,
+  image: ogImage.href,
+  homeLocation: { '@type': 'Place', name: site.location },
+  worksFor: experience.map((e) => ({ '@type': 'Organization', name: e.name, url: e.href })),
+  alumniOf: education.map((e) => ({ '@type': 'CollegeOrUniversity', name: e.name })),
+  sameAs: links.map((l) => l.href),
+};
+
+// Fontsource's CSS declares every unicode subset; the site is English-only,
+// so we declare just the Latin files here. Only Geist is preloaded: the name
+// needs it first, while a late swap of the 12px mono labels goes unnoticed.
+const fontFaces = `
+@font-face { font-family: 'Geist Variable'; font-style: normal; font-display: swap; font-weight: 100 900;
+  src: url(${geist}) format('woff2-variations'); }
+@font-face { font-family: 'Geist Mono Variable'; font-style: normal; font-display: swap; font-weight: 100 900;
+  src: url(${geistMono}) format('woff2-variations'); }`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={site.description} />
+    <meta name="theme-color" content="#000000" />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="canonical" href={url} />
+    <link rel="preload" href={geist} as="font" type="font/woff2" crossorigin />
+    <style is:inline set:html={fontFaces}></style>
+    <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content={url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={site.description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.name}, ${site.role.toLowerCase()} in ${site.location}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content={site.twitter} />
+    <meta name="twitter:creator" content={site.twitter} />
+    <script type="application/ld+json" set:html={JSON.stringify(person)} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
+
+<style>
+  main {
+    max-width: 36rem; /* ~66 characters per line */
+    margin: 0 auto;
+    padding: 160px 32px 128px;
+    box-sizing: content-box;
+  }
+
+  @media (max-width: 640px) {
+    main { padding: 96px 20px 64px; }
+  }
+</style>

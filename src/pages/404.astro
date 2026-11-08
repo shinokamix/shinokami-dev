@@ -1,0 +1,13 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { site } from '../data/site';
+---
+
+<Layout title={`Not found, ${site.name}`} noindex>
+  <h1>404</h1>
+  <p>This page doesn't exist. <a href="/">Back to {site.name}</a>.</p>
+</Layout>
+
+<style>
+  p { margin-top: 24px; }
+</style>

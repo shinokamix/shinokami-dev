@@ -1,0 +1,28 @@
+---
+import type { Entry } from '../data/site';
+
+interface Props {
+  items: Entry[];
+}
+const { items } = Astro.props;
+---
+
+<ul>
+  {items.map((item) => (
+    <li>
+      <p class="title">
+        {item.href ? <a href={item.href} target="_blank" rel="noopener noreferrer">{item.name}</a> : item.name}
+        {item.role && <span class="role">, {item.role}</span>}
+      </p>
+      {item.text.map((t) => <p>{t}</p>)}
+    </li>
+  ))}
+</ul>
+
+<style>
+  ul { list-style: none; display: flex; flex-direction: column; gap: 48px; }
+  .title { font-weight: 500; color: var(--fg); }
+  .role { color: var(--muted); font-weight: 400; }
+  p + p { margin-top: 16px; }
+  .title + p { margin-top: 8px; }
+</style>

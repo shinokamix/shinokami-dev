@@ -1,0 +1,64 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Entries from '../components/Entries.astro';
+import { site, about, experience, projects, education, links } from '../data/site';
+
+// Separator before link i: "GitHub, X and Telegram"
+const separator = (i: number) => (i === 0 ? '' : i === links.length - 1 ? ' and ' : ', ');
+---
+
+<Layout>
+  <header>
+    <h1>{site.name}</h1>
+    <p class="label tagline">{site.role}, {site.location}</p>
+  </header>
+
+  <section id="about" aria-label="About">
+    {about.map((line) => <p>{line}</p>)}
+  </section>
+
+  <section id="experience">
+    <h2 class="label">Experience</h2>
+    <Entries items={experience} />
+  </section>
+
+  <section id="projects">
+    <h2 class="label">Projects</h2>
+    <Entries items={projects} />
+  </section>
+
+  <section id="education">
+    <h2 class="label">Education</h2>
+    <Entries items={education} />
+  </section>
+
+  <section id="links">
+    <h2 class="label">Links</h2>
+    <p>
+      Find me on {links.map((l, i) => (
+        <>{separator(i)}<a href={l.href} target="_blank" rel="noopener noreferrer">{l.label}</a></>
+      ))}.
+    </p>
+  </section>
+</Layout>
+
+<style>
+  /* Spacing: 8 / 16 / 24 / 48 / 96 */
+  .label {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+  }
+  .tagline { margin-top: 16px; }
+  h2 { margin-bottom: 24px; }
+
+  section { margin-top: 96px; }
+  #about { margin-top: 48px; }
+
+  @media (max-width: 640px) {
+    section { margin-top: 72px; }
+  }
+</style>

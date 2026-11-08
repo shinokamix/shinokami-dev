@@ -1,5 +1,18 @@
-<img src="assets/icon.svg" width="64" height="64" alt="">
+<img src="public/apple-touch-icon.png" width="64" height="64" alt="">
 
 # shinokami.dev
 
-Created in [T3 Code](https://t3.codes).
+Personal portfolio built with [Astro](https://astro.build).
+
+## Development
+
+```sh
+pnpm install
+pnpm dev        # http://localhost:4321
+pnpm build      # static output in dist/
+pnpm preview
+```
+
+## Content
+
+All texts, experience, projects, education and links live in `src/data/site.ts`.
